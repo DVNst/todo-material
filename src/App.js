@@ -8,18 +8,26 @@ const reducer = (state, action) => {
     const id = state.reduce((max, item) => item.id > max ? item.id : max, 0) + 1;
     return [...state, {...action.payload, id: id}];
   }
+  if (action.type ==='DELETE_TASK') {
+    return [...state.filter((task) => task.id != action.payload)];
+  }
   return state;
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, []);
+  const [state, dispatch] = useReducer(reducer, [{id:0, text:'test0', copmlete: false}, {id:1, text:'test1', copmlete: true}, {id:2, text:'test2', copmlete: false}]);
 
   const addTask = (newTask) => {
     dispatch({ type: 'ADD_TASK', payload: newTask });
   };
 
+  const deleteTask = (idTask) => {
+    dispatch({ type: 'DELETE_TASK', payload: idTask });
+  };
+
   return (
     <div className="App">
+      {console.log(state)}
       <Paper className="wrapper">
         <Paper className="header" elevation={0}>
           <h4>Список задач</h4>
@@ -33,7 +41,7 @@ function App() {
         </Tabs>
         <Divider />
         <List>
-          {state.map((task) => <Item key={task.id} task={task}/>)}
+          {state.map((task) => <Item key={task.id} task={task} deleteTask={deleteTask}/>)}
         </List>
         <Divider />
         <div className="check-buttons">
