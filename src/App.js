@@ -15,7 +15,7 @@ const reducer = (state, action) => {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, [{id:0, text:'test0', copmlete: false}, {id:1, text:'test1', copmlete: true}, {id:2, text:'test2', copmlete: false}]);
+  const [state, dispatch] = useReducer(reducer, []);
 
   const addTask = (newTask) => {
     dispatch({ type: 'ADD_TASK', payload: newTask });
@@ -27,7 +27,6 @@ function App() {
 
   return (
     <div className="App">
-      {console.log(state)}
       <Paper className="wrapper">
         <Paper className="header" elevation={0}>
           <h4>Список задач</h4>
