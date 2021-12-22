@@ -15,7 +15,7 @@ export const AddField = ({ addTask }) => {
     setTask({...task, copmlete: e.target.checked});
   }
 
-  const handlerClickAdd = () => {
+  const onClickAdd = () => {
     if (task.text !== '') {
       addTask(task);
       setTask({text: '', copmlete: false});
@@ -38,7 +38,7 @@ export const AddField = ({ addTask }) => {
         fullWidth
         value={task.text}
       />
-      <Button onClick={handlerClickAdd}>
+      <Button onClick={onClickAdd}>
         <AddIcon />
       </Button>
     </div>

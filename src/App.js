@@ -6,7 +6,7 @@ import { Item } from './components/Item';
 const reducer = (state, action) => {
   if (action.type ==='ADD_TASK') {
     const id = state.reduce((max, item) => item.id > max ? item.id : max, 0) + 1;
-    return [...state, {...action.option, id: id}];
+    return [...state, {...action.payload, id: id}];
   }
   return state;
 }
@@ -15,7 +15,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, []);
 
   const addTask = (newTask) => {
-    dispatch({ type: 'ADD_TASK', option: newTask });
+    dispatch({ type: 'ADD_TASK', payload: newTask });
   };
 
   return (
@@ -33,7 +33,7 @@ function App() {
         </Tabs>
         <Divider />
         <List>
-          {state.map((task) => <Item text={task.text} key={task.id} task={task}/>)}
+          {state.map((task) => <Item key={task.id} task={task}/>)}
         </List>
         <Divider />
         <div className="check-buttons">
