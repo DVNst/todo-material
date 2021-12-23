@@ -8,6 +8,9 @@ const reducer = (state, action) => {
     const id = state.reduce((max, item) => item.id > max ? item.id : max, 0) + 1;
     return [...state, {...action.payload, id: id}];
   }
+  if (action.type ==='DELETE_TASK') {
+    return state.filter((task) => task.id !== action.payload);
+  }
   return state;
 }
 
@@ -16,6 +19,10 @@ function App() {
 
   const addTask = (newTask) => {
     dispatch({ type: 'ADD_TASK', payload: newTask });
+  };
+
+  const deleteTask = (idTask) => {
+    dispatch({ type: 'DELETE_TASK', payload: idTask });
   };
 
   return (
@@ -33,7 +40,7 @@ function App() {
         </Tabs>
         <Divider />
         <List>
-          {state.map((task) => <Item key={task.id} task={task}/>)}
+          {state.map((task) => <Item key={task.id} task={task} deleteTask={deleteTask}/>)}
         </List>
         <Divider />
         <div className="check-buttons">
