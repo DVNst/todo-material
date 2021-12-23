@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     return [...state, {...action.payload, id: id}];
   }
   if (action.type ==='DELETE_TASK') {
-    return [...state.filter((task) => task.id !== action.payload)];
+    return state.filter((task) => task.id !== action.payload);
   }
   return state;
 }
