@@ -5,20 +5,36 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const AddField = ({ addTask }) => {
-  const [task, setTask] = useState({text: '', copmlete: false});
+  const [task, setTask] = useState({ text: '', copmlete: false });
+  const [focusItem, setFocusItem] = useState(true);
 
   const handlerTextField = (e) => {
-    setTask({...task, text: e.target.value});
+    setTask({ ...task, text: e.target.value });
   }
 
   const handlerCheckbox = (e) => {
-    setTask({...task, copmlete: e.target.checked});
+    setTask({ ...task, copmlete: e.target.checked });
   }
 
   const onClickAdd = () => {
     if (task.text !== '') {
       addTask(task);
-      setTask({text: '', copmlete: false});
+      setTask({ text: '', copmlete: false });
+    }
+  }
+
+  const onKey = (e) => {
+    // console.log("e.code", e.code, "e.keyCode", e.keyCode);
+    if (focusItem) {
+      //ENTER - добавляем задачу
+      if (e.keyCode === 13) {
+        onClickAdd();
+      }
+
+      //ESC - toogle comlete
+      if (e.keyCode === 27) {
+        setTask({ ...task, copmlete: !task.copmlete });
+      }
     }
   }
 
@@ -33,6 +49,10 @@ export const AddField = ({ addTask }) => {
       />
       <TextField
         onChange={handlerTextField}
+        autoFocus={focusItem}
+        onFocus={() => setFocusItem(true)}
+        onBlur={() => setFocusItem(false)}
+        onKeyDown={onKey}
         placeholder="Введите текст задачи..."
         variant="standard"
         fullWidth

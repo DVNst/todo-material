@@ -6,17 +6,12 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-export const Item = ({ task, deleteTask }) => {
-  const handlerDeleteItem = () => {
-    if (window.confirm(`Удалить задачу ${task.text}?`)) {
-      deleteTask(task.id);
-    }
-  }
-
+export const Item = ({ task, onRemoveTask, onClickCheckbox }) => {
   return (
     <ListItem>
       <div className="d-flex item">
         <Checkbox
+          onClick={() => onClickCheckbox(task.id)}
           checked={task.copmlete}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<CheckCircleIcon />}
@@ -26,7 +21,7 @@ export const Item = ({ task, deleteTask }) => {
           <IconButton>
             <EditIcon style={{ fontSize: 20 }} />
           </IconButton>
-          <IconButton onClick={handlerDeleteItem}>
+          <IconButton onClick={() => onRemoveTask(task)}>
             <DeleteOutlineIcon style={{ fontSize: 20 }} />
           </IconButton>
         </div>
