@@ -2,12 +2,11 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Paper, Divider, Button, List, Tabs, Tab } from '@mui/material';
+import { Paper, Divider, Button, List } from '@mui/material';
 
 import { AddField } from './components/AddField';
 import { Item } from './components/Item';
-
-const FILTER_INDEX = ['all', 'active', 'completed'];
+import { FilterTab } from './components/FilterTab';
 
 function App() {
   const state = useSelector(state => state);
@@ -46,10 +45,6 @@ function App() {
     }
   }
 
-  const setFilter = (e, index) => {
-    dispatch({ type: 'SET_FILTER', payload: FILTER_INDEX[index] });
-  };
-
   return (
     <div className="App">
       <Paper className="wrapper">
@@ -58,11 +53,7 @@ function App() {
         </Paper>
         <AddField addTask={addTask} />
         <Divider />
-        <Tabs onChange={setFilter} value={FILTER_INDEX.indexOf(state.filterBy)}>
-          <Tab label="Все" />
-          <Tab label="Активные" />
-          <Tab label="Завершённые" />
-        </Tabs>
+        <FilterTab />
         <Divider />
         <List>
           {state.tasks
