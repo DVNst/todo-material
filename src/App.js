@@ -1,43 +1,92 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { Paper, Divider, Button, List, Tabs, Tab } from '@mui/material';
 import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 
 const reducer = (state, action) => {
   if (action.type === 'ADD_TASK') {
-    const id = state.reduce((max, item) => item.id > max ? item.id : max, 0) + 1;
-    return [...state, { ...action.payload, id: id }];
+    const id = state.tasks.reduce((max, item) => item.id > max ? item.id : max, 0) + 1;
+    return {
+      ...state,
+      tasks: [...state.tasks, { ...action.payload, id: id }]
+    };
   }
 
   if (action.type === 'REMOVE_TASK') {
-    return state.filter((task) => task.id !== action.payload);
+    return {
+      ...state,
+      tasks: state.tasks.filter((task) => task.id !== action.payload)
+    };
   }
 
   if (action.type === 'TOOGLE_COMPLETED') {
-    return state.map((task) => task.id === action.payload ? { ...task, copmlete: !task.copmlete } : task);
+    return {
+      ...state,
+      tasks: state.tasks.map((task) => (
+        task.id === action.payload 
+          ? {
+              ...task,
+              complete: !task.complete
+            } 
+          : task
+      ))
+    };
   }
 
   if (action.type === 'TOOGLE_COMPLETED_ALL') {
-    return state.map((task) => ({ ...task, copmlete: !action.payload }));
+    return {
+      ...state,
+      tasks: state.tasks.map((task) => (
+        {
+          ...task,
+          complete: action.payload
+        }
+      ))
+    };
   }
 
   if (action.type === 'REMOVE_ALL') {
-    return [];
+    return {
+      ...state,
+      tasks: []
+    };
+  }
+
+  if (action.type === 'SET_FILTER') {
+    return {
+      ...state,
+      filterBy: action.payload
+    };
+  }
+
+  if (action.type === 'SET_COMPLETED_ALL') {
+    return {
+      ...state,
+      completedAll: action.payload
+    };
   }
 
   return state;
 }
 
+const FILTER_INDEX = ['all', 'active', 'completed'];
+
 function App() {
-  const [state, dispatch] = useReducer(reducer, [{ text: 'test1', id: 1, copmlete: true }, { text: 'test2', id: 2, copmlete: false }, { text: 'test3', id: 3, copmlete: false }]);
-  const [completedAll, setCompletedAll] = useState(state.every((task) => task.copmlete === true));
+  const [state, dispatch] = useReducer(
+    reducer,
+    {
+      filterBy: 'all',
+      completedAll: false,
+      tasks: [{ text: 'test1', id: 1, complete: true }, { text: 'test2', id: 2, complete: false }, { text: 'test3', id: 3, complete: false }],
+    }
+  );
 
   useEffect(() => {
     //проверка completedAll, чтобы лишний раз не менять
-    if (state.every((task) => task.copmlete === true) && !completedAll) {
-      setCompletedAll(true);
-    } else if (completedAll) {
-      setCompletedAll(false);
+    if (state.tasks.every((task) => task.complete === true) && !state.completedAll) {
+      dispatch({ type: 'SET_COMPLETED_ALL', payload: true});
+    } else if (state.tasks.some((task) => task.complete === false) && state.completedAll) {
+      dispatch({ type: 'SET_COMPLETED_ALL', payload: false});
     }
   }, [state]);
 
@@ -56,7 +105,7 @@ function App() {
   };
 
   const onToogleCompletedAll = () => {
-    dispatch({ type: 'TOOGLE_COMPLETED_ALL', payload: completedAll });
+    dispatch({ type: 'TOOGLE_COMPLETED_ALL', payload: !state.completedAll });
   };
 
   const onRemoveAll = () => {
@@ -64,6 +113,10 @@ function App() {
       dispatch({ type: 'REMOVE_ALL' });
     }
   }
+
+  const setFilter = (e, index) => {
+    dispatch({ type: 'SET_FILTER', payload: FILTER_INDEX[index] });
+  };
 
   return (
     <div className="App">
@@ -73,26 +126,36 @@ function App() {
         </Paper>
         <AddField addTask={addTask} />
         <Divider />
-        <Tabs value={0}>
+        <Tabs onChange={setFilter} value={FILTER_INDEX.indexOf(state.filterBy)}>
           <Tab label="Все" />
           <Tab label="Активные" />
           <Tab label="Завершённые" />
         </Tabs>
         <Divider />
         <List>
-          {state.map((task) =>
-            <Item
-              key={task.id}
-              task={task}
-              onRemoveTask={removeTask}
-              onClickCheckbox={toogleCompleted}
-            />)
+          {state.tasks
+            .filter((task) => {
+              if (state.filterBy === 'completed') {
+                return task.complete;
+              } else if (state.filterBy === 'active') {
+                return !task.complete;
+              } else {
+                return true;
+              }
+            })
+            .map((task) =>
+              <Item
+                key={task.id}
+                task={task}
+                onRemoveTask={removeTask}
+                onClickCheckbox={toogleCompleted}
+              />)
           }
         </List>
         <Divider />
         <div className="check-buttons">
-          <Button onClick={onToogleCompletedAll}>{completedAll ? 'Снять отметки' : 'Отметить всё'}</Button>
-          <Button onClick={onRemoveAll}>Очистить</Button>
+          <Button onClick={onToogleCompletedAll} disabled={!state.tasks.length}>{state.completedAll ? 'Снять отметки' : 'Отметить всё'}</Button>
+          <Button onClick={onRemoveAll} disabled={!state.tasks.length}>Очистить</Button>
         </div>
       </Paper>
     </div>
