@@ -12,7 +12,7 @@ export const Item = ({ task, onRemoveTask, onClickCheckbox }) => {
       <div className="d-flex item">
         <Checkbox
           onClick={() => onClickCheckbox(task.id)}
-          checked={task.copmlete}
+          checked={task.complete}
           icon={<RadioButtonUncheckedIcon />}
           checkedIcon={<CheckCircleIcon />}
         />

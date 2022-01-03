@@ -5,7 +5,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const AddField = ({ addTask }) => {
-  const [task, setTask] = useState({ text: '', copmlete: false });
+  const [task, setTask] = useState({ text: '', complete: false });
   const [focusItem, setFocusItem] = useState(true);
 
   const handlerTextField = (e) => {
@@ -13,13 +13,13 @@ export const AddField = ({ addTask }) => {
   }
 
   const handlerCheckbox = (e) => {
-    setTask({ ...task, copmlete: e.target.checked });
+    setTask({ ...task, complete: e.target.checked });
   }
 
   const onClickAdd = () => {
     if (task.text !== '') {
       addTask(task);
-      setTask({ text: '', copmlete: false });
+      setTask({ text: '', complete: false });
     }
   }
 
@@ -33,7 +33,7 @@ export const AddField = ({ addTask }) => {
 
       //ESC - toogle comlete
       if (e.keyCode === 27) {
-        setTask({ ...task, copmlete: !task.copmlete });
+        setTask({ ...task, complete: !task.complete });
       }
     }
   }
@@ -45,7 +45,7 @@ export const AddField = ({ addTask }) => {
         className="checkbox"
         icon={<RadioButtonUncheckedIcon />}
         checkedIcon={<CheckCircleIcon />}
-        checked={task.copmlete}
+        checked={task.complete}
       />
       <TextField
         onChange={handlerTextField}
