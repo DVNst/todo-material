@@ -8,6 +8,8 @@ import { AddField } from './components/AddField';
 import { Item } from './components/Item';
 import { FilterTab } from './components/FilterTab';
 
+import { ActionCreator } from './redux/actions/actions';
+
 function App() {
   const state = useSelector(state => state);
   const dispatch = useDispatch();
@@ -15,35 +17,35 @@ function App() {
   useEffect(() => {
     //проверка completedAll, чтобы лишний раз не менять
     if (state.tasks.every((task) => task.complete === true) && !state.completedAll) {
-      dispatch({ type: 'SET_COMPLETED_ALL', payload: true});
+      dispatch(ActionCreator.setCompletedAll(true));
     } else if (state.tasks.some((task) => task.complete === false) && state.completedAll) {
-      dispatch({ type: 'SET_COMPLETED_ALL', payload: false});
+      dispatch(ActionCreator.setCompletedAll(false));
     }
   }, [state, dispatch]);
 
-  const addTask = (newTask) => {
-    dispatch({ type: 'ADD_TASK', payload: newTask });
+  const onAddTask = (newTask) => {
+    dispatch(ActionCreator.addTask(newTask));
   };
 
-  const removeTask = (task) => {
+  const onRemoveTask = (task) => {
     if (window.confirm(`Удалить задачу ${task.text}?`)) {
-      dispatch({ type: 'REMOVE_TASK', payload: task.id });
+      dispatch(ActionCreator.removeTask(task.id));
     }
-  };
-
-  const toogleCompleted = (id) => {
-    dispatch({ type: 'TOOGLE_COMPLETED', payload: id });
-  };
-
-  const onToogleCompletedAll = () => {
-    dispatch({ type: 'TOOGLE_COMPLETED_ALL', payload: !state.completedAll });
   };
 
   const onRemoveAll = () => {
     if (window.confirm(`Удалить все задачи?`)) {
-      dispatch({ type: 'REMOVE_ALL' });
+      dispatch(ActionCreator.removeAll());
     }
   }
+
+  const onToogleCompleted = (id) => {
+    dispatch(ActionCreator.toogleCompleted(id));
+  };
+
+  const onToogleCompletedAll = () => {
+    dispatch(ActionCreator.toogleCompletedAll(!state.completedAll));
+  };
 
   return (
     <div className="App">
@@ -51,7 +53,7 @@ function App() {
         <Paper className="header" elevation={0}>
           <h4>Список задач</h4>
         </Paper>
-        <AddField addTask={addTask} />
+        <AddField addTask={onAddTask} />
         <Divider />
         <FilterTab />
         <Divider />
@@ -70,8 +72,8 @@ function App() {
               <Item
                 key={task.id}
                 task={task}
-                onRemoveTask={removeTask}
-                onClickCheckbox={toogleCompleted}
+                onRemoveTask={onRemoveTask}
+                onClickCheckbox={onToogleCompleted}
               />)
           }
         </List>

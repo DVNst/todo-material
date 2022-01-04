@@ -2,6 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Tabs, Tab } from "@mui/material";
 
+import { ActionCreator } from '../redux/actions/actions';
+
 const FILTER_INDEX = ["all", "active", "completed"];
 
 export const FilterTab = () => {
@@ -9,7 +11,7 @@ export const FilterTab = () => {
   const dispatch = useDispatch(); 
 
   const setFilter = (_evt, index) => {
-    dispatch({ type: "SET_FILTER", payload: FILTER_INDEX[index] });
+    dispatch(ActionCreator.setFilter(FILTER_INDEX[index]));
   };
 
   return (
