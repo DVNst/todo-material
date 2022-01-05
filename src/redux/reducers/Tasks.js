@@ -1,16 +1,20 @@
-import {ActionType} from '../actions/actions';
+import { ActionType } from '../actions';
 
 const initialState = [
-  { text: "test1", id: 1, complete: true },
-  { text: "test2", id: 2, complete: false },
-  { text: "test3", id: 3, complete: false },
-  ];
+  // { text: 'test1', id: 1, complete: true },
+];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.GET_TASKS:
+      return action.payload;
+
     case ActionType.ADD_TASK:
-      const id = state.reduce((max, item) => (item.id > max ? item.id : max), 0) + 1;
-      return [...state, { ...action.payload, id: id }];
+      // if (!action.payload.id) {
+      //   const id = state.reduce((max, item) => (+item.id > max ? +item.id : max), 0) + 1;
+      //   action.payload.id = id;
+      // }
+      return [...state, action.payload];
 
     case ActionType.REMOVE_TASK:
       return state.filter((task) => task.id !== action.payload);
@@ -26,7 +30,7 @@ const reducer = (state = initialState, action) => {
               complete: !task.complete,
             }
           : task
-        );
+      );
 
     case ActionType.TOOGLE_COMPLETED_ALL:
       return state.map((task) => ({

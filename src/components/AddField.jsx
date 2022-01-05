@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { TextField, Button, Checkbox } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useState } from 'react';
+import { TextField, Button, Checkbox } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export const AddField = ({ addTask }) => {
   const [task, setTask] = useState({ text: '', complete: false });
@@ -24,7 +24,7 @@ export const AddField = ({ addTask }) => {
   }
 
   const onKey = (e) => {
-    // console.log("e.code", e.code, "e.keyCode", e.keyCode);
+    // console.log('e.code', e.code, 'e.keyCode', e.keyCode);
     if (focusItem) {
       //ENTER - добавляем задачу
       if (e.keyCode === 13) {
@@ -42,7 +42,7 @@ export const AddField = ({ addTask }) => {
     <div className="field">
       <Checkbox
         onChange={handlerCheckbox}
-        className="checkbox"
+        className='checkbox'
         icon={<RadioButtonUncheckedIcon />}
         checkedIcon={<CheckCircleIcon />}
         checked={task.complete}
@@ -53,8 +53,8 @@ export const AddField = ({ addTask }) => {
         onFocus={() => setFocusItem(true)}
         onBlur={() => setFocusItem(false)}
         onKeyDown={onKey}
-        placeholder="Введите текст задачи..."
-        variant="standard"
+        placeholder='Введите текст задачи...'
+        variant='standard'
         fullWidth
         value={task.text}
       />

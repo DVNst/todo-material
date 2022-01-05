@@ -1,10 +1,10 @@
-import { ActionType } from '../actions';
+import {ActionType} from '../actions';
 
 const initialState = false;
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.SET_COMPLETED_ALL:
+    case ActionType.IS_LOADING:
       return action.payload;
 
     default:

@@ -1,10 +1,10 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 
-import { Tabs, Tab } from "@mui/material";
+import { Tabs, Tab } from '@mui/material';
 
-import { ActionCreator } from '../redux/actions/actions';
+import { ActionCreator } from '../redux/actions';
 
-const FILTER_INDEX = ["all", "active", "completed"];
+const FILTER_INDEX = ['all', 'active', 'completed'];
 
 export const FilterTab = () => {
   const filterBy = useSelector(state => state.filterBy);
@@ -16,9 +16,9 @@ export const FilterTab = () => {
 
   return (
     <Tabs onChange={setFilter} value={FILTER_INDEX.indexOf(filterBy)}>
-      <Tab label="Все" />
-      <Tab label="Активные" />
-      <Tab label="Завершённые" />
+      <Tab label='Все' />
+      <Tab label='Активные' />
+      <Tab label='Завершённые' />
     </Tabs>
   );
 }
