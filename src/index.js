@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { createStore } from "redux";
-import { Provider } from 'react-redux';
-import reducer from './redux/reducer';
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./redux/reducer";
 
-import App from './App';
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-import './index.scss';
+import App from "./App";
 
-const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+import "./index.scss";
+
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 // console.log('store', store.getState());
 
@@ -22,5 +22,5 @@ ReactDOM.render(
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById("root")
 );
